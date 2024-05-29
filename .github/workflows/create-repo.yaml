@@ -18,7 +18,7 @@ jobs:
         ORG_NAME="squarebtech"
         TEMPLATE_OWNER="squarebtech"  # Typically the same as ORG_NAME
         TEMPLATE_REPO="repo-template"
-        REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
+        REPO_NAME=${{ github.event.client_payload.repo_name }}
         DESCRIPTION="${{ github.event.client_payload.description }}"
         TOKEN=${{ secrets.SBT_TOKEN }}
         
@@ -29,13 +29,14 @@ jobs:
                "owner": "'"$ORG_NAME"'",
                "name": "'"$REPO_NAME"'",
                "description": "'"$DESCRIPTION"'",
-               "private": false
+               "private": false,
+               "include_all_branches": true
              }'
 
     - name: Set branch protection rules
       run: |
         ORG_NAME="squarebtech"
-        REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
+        REPO_NAME=n${{ github.event.client_payload.repo_name }}
         TOKEN=${{ secrets.SBT_TOKEN }}
         
         curl -H "Authorization: token $TOKEN" \
