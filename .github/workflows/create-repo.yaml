@@ -35,6 +35,9 @@ jobs:
 
          echo "Response: $RESPONSE"
 
+    - name: Sleep for 10 seconds
+      run: sleep 10
+
     - name: Check if repository creation was successful
       id: check_repo
       run: |
@@ -59,18 +62,6 @@ jobs:
              -H "Accept: application/vnd.github.v3+json" \
              -X PUT \
              https://api.github.com/repos/$ORG_NAME/$REPO_NAME/branches/main/protection \
-             -d '{
-               "required_status_checks": {
-                 "strict": true,
-                 "contexts": []
-               },
-               "enforce_admins": true,
-               "required_pull_request_reviews": {
-                 "dismiss_stale_reviews": true,
-                 "require_code_owner_reviews": true
-               },
-               "restrictions": null
-             }'
              # -d '{
              #   "required_status_checks": {
              #     "strict": true,
@@ -78,16 +69,28 @@ jobs:
              #   },
              #   "enforce_admins": true,
              #   "required_pull_request_reviews": {
-             #     "required_approving_review_count":1,
              #     "dismiss_stale_reviews": true,
-             #     "require_code_owner_reviews": true,
-             #     "require_last_push_approval": true
+             #     "require_code_owner_reviews": true
              #   },
-             #   "require_conversation_resolution: true,
-             #   "allow_force_pushes": false,
-             #   "allow_deletions": false
              #   "restrictions": null
              # }'
+             -d '{
+               "required_status_checks": {
+                 "strict": true,
+                 "contexts": []
+               },
+               "enforce_admins": true,
+               "required_pull_request_reviews": {
+                 "required_approving_review_count":1,
+                 "dismiss_stale_reviews": true,
+                 "require_code_owner_reviews": true,
+                 "require_last_push_approval": true
+               },
+               "require_conversation_resolution: true,
+               "allow_force_pushes": false,
+               "allow_deletions": false
+               "restrictions": null
+             }'
 
 
     # - name: Add default labels
