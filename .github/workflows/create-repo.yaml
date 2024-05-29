@@ -29,8 +29,7 @@ jobs:
                "owner": "'"$ORG_NAME"'",
                "name": "'"$REPO_NAME"'",
                "description": "'"$DESCRIPTION"'",
-               "public": true,
-               "has_issues": true
+               "private": false
              }'
 
     - name: Set branch protection rules
