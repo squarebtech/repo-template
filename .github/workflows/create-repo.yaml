@@ -54,7 +54,7 @@ jobs:
         REPO_NAME=n${{ github.event.client_payload.repo_name }}
         TOKEN=${{ secrets.SBT_TOKEN }}
         
-        curl -H "Authorization: token $TOKEN" \
+        RESPONSE=$(curl -H "Authorization: token $TOKEN" \
              -H "Accept: application/vnd.github.v3+json" \
              -X PUT \
              https://api.github.com/repos/$ORG_NAME/$REPO_NAME/branches/main/protection \
@@ -74,7 +74,9 @@ jobs:
                "allow_force_pushes": false,
                "allow_deletions": false
                "restrictions": null
-             }'
+             }')
+
+        echo "Response: $RESPONSE"
 
     # - name: Add default labels
     #   run: |
