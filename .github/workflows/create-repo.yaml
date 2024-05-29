@@ -52,7 +52,7 @@ jobs:
         echo "Repository Check: $REPO_CHECK"
 
     - name: Set branch protection rules
-      if: steps.check_repo.outputs.success == 'true'
+      # if: steps.check_repo.outputs.success == 'true'
       run: |
         ORG_NAME="squarebtech"
         REPO_NAME=n${{ github.event.client_payload.repo_name }}
