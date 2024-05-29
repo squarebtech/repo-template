@@ -18,7 +18,7 @@ jobs:
         ORG_NAME="squarebtech"
         REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
         DESCRIPTION="${{ github.event.client_payload.description }}"
-        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TOKEN=${{ secrets.SBT_TOKEN }}
         
         curl -H "Authorization: token $TOKEN" \
              -H "Accept: application/vnd.github.v3+json" \
@@ -26,7 +26,7 @@ jobs:
              -d '{
                "name": "'"$REPO_NAME"'",
                "description": "'"$DESCRIPTION"'",
-               "internal": true,
+               "public": true,
                "has_issues": true
                # "has_projects": true,
                # "has_wiki": true
@@ -36,7 +36,7 @@ jobs:
       run: |
         ORG_NAME="YOUR_ORG_NAME"
         REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
-        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TOKEN=${{ secrets.SBT_TOKEN }}
         
         curl -H "Authorization: token $TOKEN" \
              -H "Accept: application/vnd.github.v3+json" \
