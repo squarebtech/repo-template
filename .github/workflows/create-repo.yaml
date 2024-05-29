@@ -22,7 +22,7 @@ jobs:
         DESCRIPTION="${{ github.event.client_payload.description }}"
         TOKEN=${{ secrets.SBT_TOKEN }}
         
-        RESPONSE=$(curl -H "Authorization: token $TOKEN" \
+        curl -H "Authorization: token $TOKEN" \
              -H "Accept: application/vnd.github.v3+json" \
              https://api.github.com/repos/$TEMPLATE_OWNER/$TEMPLATE_REPO/generate\
              -d '{
@@ -31,12 +31,12 @@ jobs:
                "description": "'"$DESCRIPTION"'",
                "private": false,
                "include_all_branches": true
-             }')
+             }'
 
-         echo "Response: $RESPONSE"
+         # echo "Response: $RESPONSE"
 
-    - name: Sleep for 5 seconds
-      run: sleep 5
+    # - name: Sleep for 5 seconds
+    #   run: sleep 5
 
     - name: Check if repository creation was successful
       id: check_repo
@@ -63,13 +63,21 @@ jobs:
              -X PUT \
              https://api.github.com/repos/$ORG_NAME/$REPO_NAME/branches/main/protection \
              -d '{
+               "required_status_checks": {
+                 "strict": true,
+                 "contexts": []
+               },
                "enforce_admins": true,
                "required_pull_request_reviews": {
+                 "required_approving_review_count":1,
                  "dismiss_stale_reviews": true,
-                 "require_code_owner_reviews": true
+                 "require_code_owner_reviews": true,
+                 "require_last_push_approval": true
                },
-               "restrictions": null,
-               "required_status_checks": null
+               "require_conversation_resolution: true,
+               "allow_force_pushes": false,
+               "allow_deletions": false,
+               "restrictions": null
              }'
 
 
