@@ -28,8 +28,6 @@ jobs:
                "description": "'"$DESCRIPTION"'",
                "public": true,
                "has_issues": true
-               # "has_projects": true,
-               # "has_wiki": true
              }'
 
     - name: Set branch protection rules
