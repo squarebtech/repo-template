@@ -55,7 +55,7 @@ jobs:
       # if: steps.check_repo.outputs.success == 'true'
       run: |
         ORG_NAME="squarebtech"
-        REPO_NAME=n${{ github.event.client_payload.repo_name }}
+        REPO_NAME=${{ github.event.client_payload.repo_name }}
         TOKEN=${{ secrets.SBT_TOKEN }}
         
         curl -H "Authorization: token $TOKEN" \
