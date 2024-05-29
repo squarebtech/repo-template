@@ -1,0 +1,73 @@
+name: Create New Repository
+
+on:
+  repository_dispatch:
+    types: [create-repo]
+
+jobs:
+  create-repository:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Create a new repository using GitHub API
+      id: create_repo
+      run: |
+        ORG_NAME="squarebtech"
+        REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
+        DESCRIPTION="${{ github.event.client_payload.description }}"
+        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        
+        curl -H "Authorization: token $TOKEN" \
+             -H "Accept: application/vnd.github.v3+json" \
+             https://api.github.com/orgs/$ORG_NAME/repos \
+             -d '{
+               "name": "'"$REPO_NAME"'",
+               "description": "'"$DESCRIPTION"'",
+               "internal": true,
+               "has_issues": true
+               # "has_projects": true,
+               # "has_wiki": true
+             }'
+
+    - name: Set branch protection rules
+      run: |
+        ORG_NAME="YOUR_ORG_NAME"
+        REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
+        TOKEN=${{ secrets.GITHUB_TOKEN }}
+        
+        curl -H "Authorization: token $TOKEN" \
+             -H "Accept: application/vnd.github.v3+json" \
+             -X PUT \
+             https://api.github.com/repos/$ORG_NAME/$REPO_NAME/branches/main/protection \
+             -d '{
+               "required_status_checks": {
+                 "strict": true,
+                 "contexts": []
+               },
+               "enforce_admins": true,
+               "required_pull_request_reviews": {
+                 "dismiss_stale_reviews": true,
+                 "require_code_owner_reviews": true
+               },
+               "restrictions": null
+             }'
+
+    # - name: Add default labels
+    #   run: |
+    #     ORG_NAME="YOUR_ORG_NAME"
+    #     REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
+    #     TOKEN=${{ secrets.GITHUB_TOKEN }}
+        
+    #     LABELS=("bug" "documentation" "enhancement" "question")
+    #     for LABEL in "${LABELS[@]}"; do
+    #       curl -H "Authorization: token $TOKEN" \
+    #            -H "Accept: application/vnd.github.v3+json" \
+    #            https://api.github.com/repos/$ORG_NAME/$REPO_NAME/labels \
+    #            -d '{
+    #              "name": "'"$LABEL"'",
+    #              "color": "f29513"
+    #            }'
+    #     done
