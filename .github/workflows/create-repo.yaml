@@ -34,7 +34,7 @@ jobs:
 
     - name: Set branch protection rules
       run: |
-        ORG_NAME="YOUR_ORG_NAME"
+        ORG_NAME="squarebtech"
         REPO_NAME=new-repo-${{ github.event.client_payload.repo_name }}
         TOKEN=${{ secrets.SBT_TOKEN }}
         
